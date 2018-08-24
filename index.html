@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>FIRE PAINT</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <main id="app">
+        <nav>
+            <div class="slidecontainer">
+                <input type="range" min="0" max="360" v-model="sliderValue" v-on:input="changeColor()" class="slider" id="myRange">
+                <span v-bind:style="{ color : color }">■</span>{{color}}
+            </div>
+        </nav>
+        <div id="paint_area">
+            <canvas ref="canvas"
+                v-on:click.right.prevent="" v-on:mousedown.left="drawOn($event)"
+                v-on:mouseup.left="drawOff($event)" v-on:mousemove="draw($event)">
+            </canvas>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
