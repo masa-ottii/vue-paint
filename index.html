@@ -16,7 +16,9 @@
         <div id="paint_area">
             <canvas ref="canvas"
                 v-on:click.right.prevent="" v-on:mousedown.left="drawOn($event)"
-                v-on:mouseup.left="drawOff($event)" v-on:mousemove="draw($event)">
+                v-on:mouseup.left="drawOff($event)" v-on:mousemove="draw($event)"
+                v-on:wheel=""
+                >
             </canvas>
         </div>
     </main>

@@ -8,7 +8,7 @@ var app = new Vue({
         thickness: 5,    //太さ
         drawFlag:false,  //描画状態のフラグ
         coordinate:[],   //描画位置の記録
-        sliderValue: 50, //色スライダーの値
+        sliderValue: 0,  //色スライダーの値
     },
     // Vueインスタンスが生成された時に動くやつ
     created(){
