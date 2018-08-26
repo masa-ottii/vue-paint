@@ -1,6 +1,14 @@
 var ctx = null;
 var canvas = null;
 var timer = null;
+var drawLine = function(from,to,color,thickness){
+    ctx.strokeStyle = color;
+    ctx.lineWidth = thickness;
+    ctx.beginPath();
+    ctx.moveTo(from.x, from.y);
+    ctx.lineTo(to.x, to.y);
+    ctx.stroke();
+}
 var app = new Vue({
     el: '#app',
     data: {
@@ -21,12 +29,11 @@ var app = new Vue({
                     canvas.height = canvas.offsetHeight;
                     // リセットすると描画が消えてしまうので、記録から再現する。
                     this.coordinate.reduce((prev, current) => {
-                        ctx.strokeStyle = this.color;
-                        ctx.lineWidth = this.thickness;
-                        ctx.beginPath();
-                        ctx.moveTo(prev.x, prev.y);
-                        ctx.lineTo(current.x, current.y);
-                        ctx.stroke();
+                        if(!prev.end){ //開始点が描画終了の点だった場合は描画をスキップ
+                            // 線の描画
+                            let c = current.color ? current.color : this.color; 
+                            drawLine(prev,current,c,this.thickness);
+                        }
                         return current;
                     });
                     clearTimeout(timer);
@@ -65,19 +72,19 @@ var app = new Vue({
             if(this.drawFlag){
                 // 前回の描画位置を取得
                 let beginPoint = this.coordinate[this.coordinate.length - 1];
+                // 前回の描画位置を取得
+                let endPoint = {x:event.offsetX,y:event.offsetY};
                 // 前回の描画位置が取得でき、かつ描画終了位置でないときだけ描画開始
                 if(beginPoint && !beginPoint.end ){
-                    ctx.strokeStyle = this.color;
-                    ctx.lineWidth = this.thickness;
-                    ctx.beginPath();
-                    ctx.moveTo(beginPoint.x, beginPoint.y);
-                    ctx.lineTo(event.offsetX, event.offsetY);
-                    ctx.stroke();
+                    // 線の描画
+                    drawLine(beginPoint,endPoint,this.color,this.thickness);
+                    // 描画色の記録
+                    endPoint.color = this.color; 
                     // 描画位置の記録
-                    this.coordinate.push({x:event.offsetX,y:event.offsetY});
+                    this.coordinate.push( endPoint );
                 }else{
                     // 描画位置の開始点だけ記録
-                    this.coordinate.push({x:event.offsetX,y:event.offsetY});
+                    this.coordinate.push( endPoint );
                 }
             }
         }
